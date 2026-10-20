@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1350px; overflow: hidden; background: #000; }
+  body { font-family: Inter, "Noto Color Emoji", sans-serif; color: #fff; position: relative; }
+  .bg { position: absolute; inset: 0; background:
+      radial-gradient(800px 600px at 90% 0%, rgba(57,231,95,.22), transparent 60%),
+      radial-gradient(800px 800px at 0% 100%, rgba(57,231,95,.12), transparent 60%),
+      linear-gradient(180deg, #000, #050a06); }
+  .grid { position: absolute; inset: 0; opacity: .06;
+      background-image: linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px);
+      background-size: 60px 60px; }
+  .frame { position: absolute; inset: 34px; border: 3px solid rgba(154,163,160,.35); border-radius: 40px; }
+  b { background: linear-gradient(180deg, #7dff8f, #1fc94a); -webkit-background-clip: text; color: transparent; }
+  .top { position: absolute; left: 90px; right: 90px; top: 86px; display: flex; justify-content: space-between; align-items: center; }
+  .brand { display: flex; align-items: center; gap: 18px; font-weight: 800; font-size: 28px; letter-spacing: 3px; color: #c9cfcc; }
+  .brand i { width: 64px; height: 64px; background: url(assets/shield.png) center/contain no-repeat; }
+  .count { font-size: 28px; font-weight: 700; color: #7f8a84; }
+  .body { position: absolute; left: 90px; right: 90px; top: 200px; bottom: 170px; display: flex; flex-direction: column; justify-content: center; gap: 36px; }
+  .kicker { align-self: flex-start; font-size: 28px; font-weight: 800; letter-spacing: 5px; color: #39e75f; border: 3px solid #39e75f; padding: 12px 26px; border-radius: 60px; }
+  h1 { font-size: 104px; line-height: 1.02; font-weight: 900; letter-spacing: -3px; }
+  h2 { font-size: 72px; line-height: 1.06; font-weight: 900; letter-spacing: -2px; }
+  .num { font-size: 150px; font-weight: 900; line-height: .9; color: #39e75f; letter-spacing: -4px; }
+  p { font-size: 40px; line-height: 1.35; color: #d6dcd8; font-weight: 500; }
+  p strong { color: #fff; font-weight: 800; }
+  .card { background: #0d1410; border: 2px solid rgba(57,231,95,.45); border-radius: 28px; padding: 30px 36px; font-family: "DejaVu Sans Mono", monospace; font-size: 32px; line-height: 1.55; color: #e7ece9; }
+  .card .lbl { font-family: Inter, sans-serif; font-size: 24px; letter-spacing: 3px; font-weight: 800; color: #7f8a84; margin-bottom: 8px; }
+  .card .bad { color: #ff6b6b; font-weight: 700; }
+  .card .ok { color: #39e75f; font-weight: 700; }
+  .myth, .real { border-radius: 28px; padding: 34px 38px; font-size: 42px; line-height: 1.3; font-weight: 700; }
+  .myth { background: rgba(255,90,90,.08); border: 2px solid rgba(255,107,107,.55); color: #f1d6d6; }
+  .real { background: rgba(57,231,95,.08); border: 2px solid rgba(57,231,95,.6); }
+  .myth .t, .real .t { font-size: 26px; letter-spacing: 5px; font-weight: 900; margin-bottom: 12px; }
+  .myth .t { color: #ff6b6b; } .real .t { color: #39e75f; }
+  .real span { font-weight: 500; color: #e7ece9; }
+  .swipe { position: absolute; right: 90px; bottom: 90px; font-size: 32px; font-weight: 800; color: #39e75f; }
+  .foot { position: absolute; left: 90px; bottom: 92px; font-size: 24px; color: #7f8a84; font-weight: 600; }
+  .ctaw { align-items: center; text-align: center; }
+  .logo { width: 380px; height: 380px; background: url(assets/logo-a.png) center/contain no-repeat; filter: drop-shadow(0 0 40px rgba(57,231,95,.3)); }
+  .price { font-size: 100px; font-weight: 900; color: #39e75f; letter-spacing: -3px; }
+  .price span { font-size: 38px; color: #fff; font-weight: 700; letter-spacing: 0; }
+  .cta { background: linear-gradient(180deg, #5cff78, #1fc94a); color: #000; font-weight: 900; font-size: 44px; padding: 26px 56px; border-radius: 80px; }
+</style>
+</head>
+<body>
+<div class="bg"></div><div class="grid"></div><div class="frame"></div>
+<div class="top"><div class="brand"><i></i>CERTIFIED BUILDERS</div><div class="count" id="count"></div></div>
+<div class="body" id="body"></div>
+<div class="swipe" id="swipe"></div>
+<div class="foot" id="foot"></div>
+<script>
+// SPEC injected by render.mjs: { swipe, foot, slides: [...] }
+const S = window.SPEC;
+const tpl = {
+  cover: (s) => `${s.kicker ? `<div class="kicker">${s.kicker}</div>` : ""}<h1>${s.title}</h1>${s.text ? `<p>${s.text}</p>` : ""}`,
+  point: (s) => `${s.num ? `<div class="num">${s.num}</div>` : ""}<h2>${s.title}</h2>${s.text ? `<p>${s.text}</p>` : ""}${s.card ? `<div class="card">${s.card}</div>` : ""}`,
+  myth: (s) => `<div class="myth"><div class="t">${s.mythLbl}</div>“${s.myth}”</div><div class="real"><div class="t">${s.realLbl}</div>${s.real}</div>`,
+  cta: (s) => `<div class="logo"></div><h2>${s.title}</h2><p>${s.text}</p><div class="price">$50 <span>${s.per}</span></div><div class="cta">${s.cta}</div>`,
+};
+window.show = (i) => {
+  const s = S.slides[i], body = document.getElementById("body");
+  body.className = "body" + (s.type === "cta" ? " ctaw" : "");
+  body.innerHTML = tpl[s.type](s);
+  document.getElementById("count").textContent = `${i + 1}/${S.slides.length}`;
+  document.getElementById("swipe").textContent = i < S.slides.length - 1 ? S.swipe : "";
+  document.getElementById("foot").textContent = S.foot;
+};
+window.COUNT = S.slides.length;
+show(0);
+</script>
+</body>
+</html>
