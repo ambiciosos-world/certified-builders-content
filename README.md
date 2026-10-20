@@ -14,7 +14,9 @@ All data shown in the content is made-up sample data.
 3. Push, then schedule each post in Metricool with the
    `raw.githubusercontent.com/.../main/media/...` URLs.
 
-Music is mixed in at build time (royalty-free track, never committed here).
+Music is mixed in at build time from a royalty-free track the owner supplies
+(never committed here). Fallback: `python3 tools/beat.py out.wav` writes an
+original trap instrumental with no third-party rights.
 
 ## Brand rules
 - Faceless: the owner never appears; nothing linked to their personal or music accounts.
